@@ -7,18 +7,14 @@
 
 import UIKit
 
-nonisolated enum Section: Hashable, Sendable {
-    case banner
-}
-
-nonisolated enum Item: Hashable, Sendable {
-    case banner(UIImage)
-}
-
 class HomeViewController: UIViewController {
+    enum Section {
+        case banner
+    }
+    
     @IBOutlet weak var collectionView: UICollectionView!
     
-    private var dataSource: UICollectionViewDiffableDataSource<Section, Item>?
+    private var dataSource: UICollectionViewDiffableDataSource<Section, UIImage>?
     private var compositionalLayout: UICollectionViewCompositionalLayout = {
         let itemSize: NSCollectionLayoutSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
         let item: NSCollectionLayoutItem = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -37,21 +33,14 @@ class HomeViewController: UIViewController {
         collectionView.collectionViewLayout = compositionalLayout
         
         dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
-            switch itemIdentifier {
-            case .banner(let image):
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeBannerCollectionViewCell", for: indexPath) as! HomeBannerCollectionViewCell
-                cell.setImage(image)
-                return cell
-            }
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeBannerCollectionViewCell", for: indexPath) as! HomeBannerCollectionViewCell
+            cell.setImage(itemIdentifier)
+            return cell
         })
         
-        var snapShot = NSDiffableDataSourceSnapshot<Section, Item>()
+        var snapShot = NSDiffableDataSourceSnapshot<Section, UIImage>()
         snapShot.appendSections([.banner])
-        snapShot.appendItems([
-            .banner(UIImage(resource: .slide1)),
-            .banner(UIImage(resource: .slide2)),
-            .banner(UIImage(resource: .slide3))
-        ], toSection: .banner)
+        snapShot.appendItems([UIImage(resource: .slide1), UIImage(resource: .slide2), UIImage(resource: .slide3)], toSection: .banner)
         dataSource?.apply(snapShot)
     }
 }
