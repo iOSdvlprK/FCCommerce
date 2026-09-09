@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct HomeProductCollectionViewCellViewModel {
+struct HomeProductCollectionViewCellViewModel: Hashable {
     let imageUrlString: String
     let title: String
     let reasonDiscountString: String
@@ -16,7 +16,11 @@ struct HomeProductCollectionViewCellViewModel {
 }
 
 class HomeProductCollectionViewCell: UICollectionViewCell {
-    @IBOutlet weak var productItemImageView: UIImageView!
+    @IBOutlet weak var productItemImageView: UIImageView! {
+        didSet {
+            productItemImageView.layer.cornerRadius = 5
+        }
+    }
     @IBOutlet weak var productTitleLabel: UILabel!
     @IBOutlet weak var productReasonDiscountLabel: UILabel!
     @IBOutlet weak var originalPriceLabel: UILabel!
