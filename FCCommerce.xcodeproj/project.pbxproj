@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D88DC61D30485A8400056ECB /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = D88DC61C30485A8400056ECB /* Lottie */; };
+		D8F6A4F1305574D2009E11F5 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = D8F6A4F0305574D2009E11F5 /* Kingfisher */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8F6A4F1305574D2009E11F5 /* Kingfisher in Frameworks */,
 				D88DC61D30485A8400056ECB /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -51,6 +53,7 @@
 			isa = PBXGroup;
 			children = (
 				D85A54583045C21B0037DB2F /* FCCommerce */,
+				D8F6A4EF305574D2009E11F5 /* Frameworks */,
 				D85A54573045C21B0037DB2F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -61,6 +64,13 @@
 				D85A54563045C21B0037DB2F /* FCCommerce.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		D8F6A4EF305574D2009E11F5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -84,6 +94,7 @@
 			name = FCCommerce;
 			packageProductDependencies = (
 				D88DC61C30485A8400056ECB /* Lottie */,
+				D8F6A4F0305574D2009E11F5 /* Kingfisher */,
 			);
 			productName = FCCommerce;
 			productReference = D85A54563045C21B0037DB2F /* FCCommerce.app */;
@@ -115,6 +126,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				D88DC61B30485A8400056ECB /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				D83BB366305572F9001111A4 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D85A54573045C21B0037DB2F /* Products */;
@@ -358,9 +370,17 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		D83BB366305572F9001111A4 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.12.0;
+			};
+		};
 		D88DC61B30485A8400056ECB /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "git@github.com:airbnb/lottie-ios.git";
+			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 4.6.1;
@@ -373,6 +393,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D88DC61B30485A8400056ECB /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
+		};
+		D8F6A4F0305574D2009E11F5 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D83BB366305572F9001111A4 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
