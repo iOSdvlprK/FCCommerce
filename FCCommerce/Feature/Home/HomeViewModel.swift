@@ -67,15 +67,17 @@ class HomeViewModel {
     
     @MainActor
     private func transformHorizontalProduct(_ response: HomeResponse) async {
-        state.collectionViewModels.horizontalProductViewModels = response.horizontalProducts.map {
-            HomeProductCollectionViewCellViewModel(imageUrlString: $0.imageUrl, title: $0.title, reasonDiscountString: $0.discount, originalPrice: "\($0.originalPrice)", discountPrice: "\($0.discountPrice)")
-        }
+        state.collectionViewModels.horizontalProductViewModels = productToHomeProductCollectionViewCellViewModel(response.horizontalProducts)
     }
     
     @MainActor
     private func transformVerticalProduct(_ response: HomeResponse) async {
-        state.collectionViewModels.verticalProductViewModels = response.verticalProducts.map {
-            HomeProductCollectionViewCellViewModel(imageUrlString: $0.imageUrl, title: $0.title, reasonDiscountString: $0.discount, originalPrice: "\($0.originalPrice)", discountPrice: "\($0.discountPrice)")
+        state.collectionViewModels.verticalProductViewModels = productToHomeProductCollectionViewCellViewModel(response.verticalProducts)
+    }
+    
+    private func productToHomeProductCollectionViewCellViewModel(_ product: [Product]) -> [HomeProductCollectionViewCellViewModel] {
+        return product.map {
+            HomeProductCollectionViewCellViewModel(imageUrlString: $0.imageUrl, title: $0.title, reasonDiscountString: $0.discount, originalPrice: $0.originalPrice.moneyString, discountPrice: $0.discountPrice.moneyString)
         }
     }
 }
