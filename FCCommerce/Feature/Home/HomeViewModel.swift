@@ -8,17 +8,20 @@
 import Foundation
 import Combine
 
-class HomeViewModel {
+final class HomeViewModel {
     enum Action {
         case loadData
+        case loadCoupon
         case getDataSuccess(HomeResponse)
         case getDataFailure(Error)
+        case getCouponSuccess(Bool)
     }
     final class State {
         struct CollectionViewModels {
             var bannerViewModels: [HomeBannerCollectionViewCellViewModel]?
             var horizontalProductViewModels: [HomeProductCollectionViewCellViewModel]?
             var verticalProductViewModels: [HomeProductCollectionViewCellViewModel]?
+            var couponState: [HomeCouponButtonCollectionViewCellViewModel]?
         }
         @Published var collectionViewModels = CollectionViewModels()
     }
@@ -30,13 +33,23 @@ class HomeViewModel {
         switch action {
         case .loadData:
             loadData()
+        case .loadCoupon:
+            loadCoupon()
         case let .getDataSuccess(response):
             transformResponse(response)
         case let .getDataFailure(error):
             print("network error: \(error)")
+        case let .getCouponSuccess(isDownloaded):
+            Task { await transformCoupon(isDownloaded) }
         }
     }
     
+    deinit {
+        loadDataTask?.cancel()
+    }
+}
+
+extension HomeViewModel {
     private func loadData() {
         loadDataTask = Task {
             do {
@@ -48,8 +61,9 @@ class HomeViewModel {
         }
     }
     
-    deinit {
-        loadDataTask?.cancel()
+    private func loadCoupon() {
+        let couponState: Bool = UserDefaults.standard.bool(forKey: "CouponDownloaded")
+        process(action: .getCouponSuccess(couponState))
     }
     
     private func transformResponse(_ response: HomeResponse) {
@@ -79,5 +93,10 @@ class HomeViewModel {
         return product.map {
             HomeProductCollectionViewCellViewModel(imageUrlString: $0.imageUrl, title: $0.title, reasonDiscountString: $0.discount, originalPrice: $0.originalPrice.moneyString, discountPrice: $0.discountPrice.moneyString)
         }
+    }
+    
+    @MainActor
+    private func transformCoupon(_ isDownloaded: Bool) async {
+        state.collectionViewModels.couponState = [.init(state: isDownloaded ? .disable : .enable)]
     }
 }
