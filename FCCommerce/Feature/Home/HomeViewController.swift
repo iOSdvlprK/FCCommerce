@@ -9,7 +9,9 @@ import UIKit
 import Combine
 
 final class HomeViewController: UIViewController {
-    enum Section: Int {
+    private typealias DataSource = UICollectionViewDiffableDataSource<Section, AnyHashable>
+    private typealias SnapShot = NSDiffableDataSourceSnapshot<Section, AnyHashable>
+    private enum Section: Int {
         case banner
         case horizontalProductItem
         case couponButton
@@ -18,24 +20,27 @@ final class HomeViewController: UIViewController {
     
     @IBOutlet private weak var collectionView: UICollectionView!
     
-    private var dataSource: UICollectionViewDiffableDataSource<Section, AnyHashable>?
-    private var compositionalLayout: UICollectionViewCompositionalLayout = setCompositionalLayout()
+    private lazy var dataSource: DataSource = setDataSource()
+    private lazy var compositionalLayout: UICollectionViewCompositionalLayout = setCompositionalLayout()
     private var viewModel = HomeViewModel()
     private var cancellables: Set<AnyCancellable> = []
+    private var currentSection: [Section] {
+        dataSource.snapshot().sectionIdentifiers as [Section]
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         collectionView.collectionViewLayout = compositionalLayout
         bindingViewModel()
-        setDataSource()
         
         viewModel.process(action: .loadData)
+        viewModel.process(action: .loadCoupon)
     }
     
-    private static func setCompositionalLayout() -> UICollectionViewCompositionalLayout {
-        UICollectionViewCompositionalLayout { section, _ in
-            switch Section(rawValue: section) {
+    private func setCompositionalLayout() -> UICollectionViewCompositionalLayout {
+        UICollectionViewCompositionalLayout { [weak self] section, _ in
+            switch self?.currentSection[section] {
             case .banner:
                 return HomeBannerCollectionViewCell.bannerLayout()
             case .horizontalProductItem:
@@ -57,9 +62,9 @@ final class HomeViewController: UIViewController {
             .store(in: &cancellables)
     }
     
-    private func setDataSource() {
-        dataSource = UICollectionViewDiffableDataSource(collectionView: collectionView, cellProvider: { [weak self] collectionView, indexPath, itemIdentifier in
-            switch Section(rawValue: indexPath.section) {
+    private func setDataSource() -> DataSource {
+        return UICollectionViewDiffableDataSource(collectionView: collectionView, cellProvider: { [weak self] collectionView, indexPath, itemIdentifier in
+            switch self?.currentSection[indexPath.section] {
             case .banner:
                 return self?.bannerCell(collectionView, indexPath, itemIdentifier)
             case .horizontalProductItem, .verticalProductItem:
@@ -73,7 +78,7 @@ final class HomeViewController: UIViewController {
     }
     
     private func applySnapShot() {
-        var snapShot = NSDiffableDataSourceSnapshot<Section, AnyHashable>()
+        var snapShot = SnapShot()
         if let bannerViewModels = viewModel.state.collectionViewModels.bannerViewModels {
             snapShot.appendSections([.banner])
             snapShot.appendItems(bannerViewModels, toSection: .banner)
@@ -93,7 +98,7 @@ final class HomeViewController: UIViewController {
             snapShot.appendSections([.verticalProductItem])
             snapShot.appendItems(verticalProductViewModels, toSection: .verticalProductItem)
         }
-        dataSource?.apply(snapShot)
+        dataSource.apply(snapShot)
     }
     
     private func bannerCell(_ collectionView: UICollectionView, _ indexPath: IndexPath, _ itemIdentifier: AnyHashable) -> UICollectionViewCell {
