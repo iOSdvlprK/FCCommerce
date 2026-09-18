@@ -15,6 +15,7 @@ final class HomeViewModel {
         case getDataSuccess(HomeResponse)
         case getDataFailure(Error)
         case getCouponSuccess(Bool)
+        case didTapCouponButton
     }
     final class State {
         struct CollectionViewModels {
@@ -28,6 +29,7 @@ final class HomeViewModel {
     
     private(set) var state = State()
     private var loadDataTask: Task<Void, Never>?
+    private let couponDownloadedKey = "CouponDownloaded"
     
     func process(action: Action) {
         switch action {
@@ -41,6 +43,8 @@ final class HomeViewModel {
             print("network error: \(error)")
         case let .getCouponSuccess(isDownloaded):
             Task { await transformCoupon(isDownloaded) }
+        case .didTapCouponButton:
+            downloadCoupon()
         }
     }
     
@@ -62,7 +66,7 @@ extension HomeViewModel {
     }
     
     private func loadCoupon() {
-        let couponState: Bool = UserDefaults.standard.bool(forKey: "CouponDownloaded")
+        let couponState: Bool = UserDefaults.standard.bool(forKey: couponDownloadedKey)
         process(action: .getCouponSuccess(couponState))
     }
     
@@ -98,5 +102,10 @@ extension HomeViewModel {
     @MainActor
     private func transformCoupon(_ isDownloaded: Bool) async {
         state.collectionViewModels.couponState = [.init(state: isDownloaded ? .disable : .enable)]
+    }
+    
+    private func downloadCoupon() {
+        UserDefaults.standard.setValue(true, forKey: couponDownloadedKey)
+        process(action: .loadCoupon)
     }
 }

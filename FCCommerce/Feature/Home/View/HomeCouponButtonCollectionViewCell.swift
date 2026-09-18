@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 struct HomeCouponButtonCollectionViewCellViewModel: Hashable {
     enum CouponState {
@@ -16,6 +17,7 @@ struct HomeCouponButtonCollectionViewCellViewModel: Hashable {
 }
 
 final class HomeCouponButtonCollectionViewCell: UICollectionViewCell {
+    private weak var didTapCouponDownload: PassthroughSubject<Void, Never>?
     @IBOutlet private weak var couponButton: UIButton! {
         didSet {
             couponButton.setImage(CPImage.buttonActivate, for: .normal)
@@ -23,13 +25,18 @@ final class HomeCouponButtonCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    func setViewModel(_ viewModel: HomeCouponButtonCollectionViewCellViewModel) {
+    func setViewModel(_ viewModel: HomeCouponButtonCollectionViewCellViewModel, _ didTapCouponDownload: PassthroughSubject<Void, Never>?) {
+        self.didTapCouponDownload = didTapCouponDownload
         couponButton.isEnabled = switch viewModel.state {
         case .enable:
             true
         case .disable:
             false
         }
+    }
+    
+    @IBAction private func didTapCouponButton(_ sender: Any) {
+        didTapCouponDownload?.send()
     }
 }
 

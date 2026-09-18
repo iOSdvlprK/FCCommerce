@@ -27,6 +27,7 @@ final class HomeViewController: UIViewController {
     private var currentSection: [Section] {
         dataSource.snapshot().sectionIdentifiers as [Section]
     }
+    private var didTapCouponDownload = PassthroughSubject<Void, Never>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,6 +59,12 @@ final class HomeViewController: UIViewController {
         viewModel.state.$collectionViewModels.receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.applySnapShot()
+            }
+            .store(in: &cancellables)
+        
+        didTapCouponDownload.receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.viewModel.process(action: .didTapCouponButton)
             }
             .store(in: &cancellables)
     }
@@ -118,7 +125,7 @@ final class HomeViewController: UIViewController {
     private func couponButtonCell(_ collectionView: UICollectionView, _ indexPath: IndexPath, _ itemIdentifier: AnyHashable) -> UICollectionViewCell {
         guard let viewModel = itemIdentifier as? HomeCouponButtonCollectionViewCellViewModel,
               let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HomeCouponButtonCollectionViewCell", for: indexPath) as? HomeCouponButtonCollectionViewCell else { return .init() }
-        cell.setViewModel(viewModel)
+        cell.setViewModel(viewModel, didTapCouponDownload)
         return cell
     }
 }
