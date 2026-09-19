@@ -125,8 +125,16 @@
                                             <outlet property="productTitleLabel" destination="doo-E8-yMa" id="VfH-CN-e02"/>
                                         </connections>
                                     </collectionViewCell>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="HomeSeparateLineCollectionViewCell" id="xPx-7h-6mt" customClass="HomeSeparateLineCollectionViewCell" customModule="FCCommerce" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="137" width="393" height="180"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="H8H-zm-0ti">
+                                            <rect key="frame" x="0.0" y="0.0" width="393" height="180"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </collectionViewCellContentView>
+                                    </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="HomeCouponButtonCollectionViewCell" id="tmv-ND-8Lu" customClass="HomeCouponButtonCollectionViewCell" customModule="FCCommerce" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="137" width="393" height="256"/>
+                                        <rect key="frame" x="0.0" y="327" width="393" height="256"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="iLq-M1-vm4">
                                             <rect key="frame" x="0.0" y="0.0" width="393" height="256"/>
