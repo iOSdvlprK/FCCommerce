@@ -11,6 +11,11 @@ struct HomeSeparateLineCollectionViewCellViewModel: Hashable {
 }
 
 final class HomeSeparateLineCollectionViewCell: UICollectionViewCell {
+    static let reuseableId = "HomeSeparateLineCollectionViewCell"
+    
+    func setViewModel(_ viewModel: HomeSeparateLineCollectionViewCellViewModel) {
+        contentView.backgroundColor = CPColor.gray1
+    }
 }
 
 extension HomeSeparateLineCollectionViewCell {
@@ -21,7 +26,7 @@ extension HomeSeparateLineCollectionViewCell {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .none
-        section.contentInsets = .zero
+        section.contentInsets = .init(top: 20, leading: 0, bottom: 0, trailing: 0)
         return section
     }
 }
