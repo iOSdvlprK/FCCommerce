@@ -35,6 +35,11 @@ extension HomeThemeCollectionViewCell {
         section.orthogonalScrollingBehavior = .groupPagingCentered
         section.interGroupSpacing = 16
         section.contentInsets = .init(top: 35, leading: 0, bottom: 0, trailing: 0)
+        
+        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(65))
+        let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+        
+        section.boundarySupplementaryItems = [header]
         return section
     }
 }

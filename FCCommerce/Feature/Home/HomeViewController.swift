@@ -78,7 +78,7 @@ final class HomeViewController: UIViewController {
     }
     
     private func setDataSource() -> DataSource {
-        return UICollectionViewDiffableDataSource(collectionView: collectionView, cellProvider: { [weak self] collectionView, indexPath, itemIdentifier in
+        let dataSource: DataSource = UICollectionViewDiffableDataSource(collectionView: collectionView, cellProvider: { [weak self] collectionView, indexPath, itemIdentifier in
             switch self?.currentSection[indexPath.section] {
             case .banner:
                 return self?.bannerCell(collectionView, indexPath, itemIdentifier)
@@ -94,6 +94,15 @@ final class HomeViewController: UIViewController {
                 return .init()
             }
         })
+        dataSource.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
+            guard kind == UICollectionView.elementKindSectionHeader,
+                  let viewModel = self?.viewModel.state.collectionViewModels.themeViewModels?.headerViewModel else { return nil }
+            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HomeThemeHeaderCollectionReusableView.reusableId, for: indexPath) as? HomeThemeHeaderCollectionReusableView
+            headerView?.setViewModel(viewModel)
+            return headerView
+        }
+        
+        return dataSource
     }
     
     private func applySnapShot() {
@@ -121,7 +130,10 @@ final class HomeViewController: UIViewController {
             snapShot.appendItems(verticalProductViewModels, toSection: .verticalProductItem)
         }
         
-        if let themeViewModels = viewModel.state.collectionViewModels.themeViewModels {
+        if let themeViewModels = viewModel.state.collectionViewModels.themeViewModels?.items {
+            snapShot.appendSections([.separateLine2])
+                        snapShot.appendItems(viewModel.state.collectionViewModels.separateLine2ViewModels, toSection: .separateLine2)
+            
             snapShot.appendSections([.theme])
             snapShot.appendItems(themeViewModels, toSection: .theme)
         }
