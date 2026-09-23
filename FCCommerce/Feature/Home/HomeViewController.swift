@@ -174,6 +174,13 @@ final class HomeViewController: UIViewController {
         cell.setViewModel(viewModel)
         return cell
     }
+    
+    @IBAction func favoriteButtonAction(_ sender: Any) {
+        let favoriteStoryboard = UIStoryboard(name: "Favorite", bundle: nil)
+        if let favoriteViewController = favoriteStoryboard.instantiateInitialViewController() {
+            navigationController?.pushViewController(favoriteViewController, animated: true)
+        }
+    }
 }
 
 #Preview {
