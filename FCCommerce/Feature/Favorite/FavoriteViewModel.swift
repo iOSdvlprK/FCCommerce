@@ -25,7 +25,7 @@ final class FavoriteViewModel {
         case .getFavoriteFromAPI:
             getFavoriteFromAPI()
         case .getFavoriteSuccess(let favoriteResponse):
-            print(favoriteResponse)
+            translateFavoriteItemViewModel(favoriteResponse)
         case .getFavoriteFailure(let error):
             print(error)
         case .didTapPurchaseButton:
