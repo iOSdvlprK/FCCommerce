@@ -11,6 +11,7 @@ import Combine
 final class DetailViewModel: ObservableObject {
     struct State {
         var isLoading: Bool = false
+        var banners: DetailBannerViewModel?
     }
     enum Action {
         case loadData

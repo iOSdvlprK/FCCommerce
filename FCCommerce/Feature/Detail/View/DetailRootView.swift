@@ -8,11 +8,31 @@
 import SwiftUI
 
 struct DetailRootView: View {
+    var viewModel: DetailViewModel
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack(spacing: 0) {
+            ScrollView(.vertical) {
+                VStack(spacing: 0) {
+                    if let banners = viewModel.state.banners {
+                        DetailBannerView(viewModel: banners)
+                    }
+                }
+            }
+        }
+        
+        if viewModel.state.isLoading {
+            Text("로딩 중...")
+        } else {
+            Text("로딩 완료!")
+        }
+        Text("Hello, World!")
+            .onAppear {
+                viewModel.process(.loadData)
+            }
     }
 }
 
 #Preview {
-    DetailRootView()
+    DetailRootView(viewModel: DetailViewModel())
 }
