@@ -14,7 +14,7 @@ final class HomeSeparateLineCollectionViewCell: UICollectionViewCell {
     static let reuseableId = "HomeSeparateLineCollectionViewCell"
     
     func setViewModel(_ viewModel: HomeSeparateLineCollectionViewCellViewModel) {
-        contentView.backgroundColor = CPColor.gray1
+        contentView.backgroundColor = CPColor.UIKit.gray1
     }
 }
 
