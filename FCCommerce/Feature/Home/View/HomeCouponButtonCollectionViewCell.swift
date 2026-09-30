@@ -22,8 +22,8 @@ final class HomeCouponButtonCollectionViewCell: UICollectionViewCell {
     private weak var didTapCouponDownload: PassthroughSubject<Void, Never>?
     @IBOutlet private weak var couponButton: UIButton! {
         didSet {
-            couponButton.setImage(CPImage.buttonActivate, for: .normal)
-            couponButton.setImage(CPImage.buttonComplete, for: .disabled)
+            couponButton.setImage(CPImage.UIKit.buttonActivate, for: .normal)
+            couponButton.setImage(CPImage.UIKit.buttonComplete, for: .disabled)
         }
     }
     

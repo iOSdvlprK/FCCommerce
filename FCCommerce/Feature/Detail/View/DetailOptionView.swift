@@ -22,7 +22,7 @@ final class DetailOptionViewModel: ObservableObject {
 }
 
 struct DetailOptionView: View {
-    var viewModel: DetailOptionViewModel
+    @ObservedObject var viewModel: DetailOptionViewModel
     
     var body: some View {
         HStack(spacing: 0) {

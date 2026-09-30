@@ -23,7 +23,7 @@ final class DetailPriceViewModel: ObservableObject {
 }
 
 struct DetailPriceView: View {
-    var viewModel: DetailPriceViewModel
+    @ObservedObject var viewModel: DetailPriceViewModel
     
     var body: some View {
         VStack(alignment: .leading, spacing: 21) {

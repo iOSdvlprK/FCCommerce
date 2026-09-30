@@ -18,7 +18,7 @@ final class DetailBannerViewModel: ObservableObject {
 }
 
 struct DetailBannerView: View {
-    var viewModel: DetailBannerViewModel
+    @ObservedObject var viewModel: DetailBannerViewModel
     
     var body: some View {
         ScrollView(.horizontal) {

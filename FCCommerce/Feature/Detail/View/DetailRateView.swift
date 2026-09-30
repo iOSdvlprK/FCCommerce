@@ -17,7 +17,7 @@ final class DetailRateViewModel: ObservableObject {
 }
 
 struct DetailRateView: View {
-    var viewModel: DetailRateViewModel
+    @ObservedObject var viewModel: DetailRateViewModel
     
     var body: some View {
         HStack(spacing: 4) {
