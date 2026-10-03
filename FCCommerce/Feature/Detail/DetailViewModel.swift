@@ -10,6 +10,7 @@ import Combine
 
 final class DetailViewModel: ObservableObject {
     struct State {
+        var isError: String?
         var isLoading: Bool = false
         var banners: DetailBannerViewModel?
         var rate: DetailRateViewModel?
@@ -43,7 +44,7 @@ final class DetailViewModel: ObservableObject {
         case let .getDataSuccess(response):
             Task { await transformProductDetailResponse(response) }
         case let .getDataFailure(error):
-            print(error)
+            Task { await getDataFailure(error) }
         case let .loading(isLoading):
             Task { await toggleLoading(isLoading) }
         case .didTapChangeOption:
@@ -97,6 +98,7 @@ extension DetailViewModel {
     
     @MainActor
     private func transformProductDetailResponse(_ response: ProductDetailResponse) async {
+        state.isError = nil
         state.banners = DetailBannerViewModel(imageUrls: response.bannerImages)
         state.rate = DetailRateViewModel(rate: response.product.rate)
         state.title = response.product.name
@@ -105,5 +107,10 @@ extension DetailViewModel {
         state.mainImageUrls = response.detailImages
         state.more = needShowMore ? DetailMoreViewModel() : nil
         state.purchase = DetailPurchaseViewModel(isFavorite: isFavorite)
+    }
+    
+    @MainActor
+    private func getDataFailure(_ error: Error) {
+        state.isError = "에러가 발생했습니다. \(error.localizedDescription)"
     }
 }
