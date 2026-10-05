@@ -6,10 +6,14 @@
 //
 
 import UIKit
+import Combine
 
 final class PurchaseViewController: UIViewController {
+    private var cancellables: Set<AnyCancellable> = []
+    private var viewModel = PurchaseViewModel()
     private var scrollViewConstraints: [NSLayoutConstraint]?
     private var titleLabelConstraints: [NSLayoutConstraint]?
+    private var purchaseItemStackViewConstraints: [NSLayoutConstraint]?
     
     private var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -30,13 +34,22 @@ final class PurchaseViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    private var purchaseItemStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .fill
+        stackView.spacing = 7
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.addSubview(scrollView)
-        scrollView.addSubview(containerView)
-        containerView.addSubview(titleLabel)
+        addSubViews()
+        bindViewModel()
+        viewModel.process(.loadData)
     }
     
     override func updateViewConstraints() {
@@ -60,14 +73,45 @@ final class PurchaseViewController: UIViewController {
             let constraints = [
                 titleLabel.topAnchor.constraint(equalTo: superView.topAnchor, constant: 33),
                 titleLabel.leadingAnchor.constraint(equalTo: superView.leadingAnchor, constant: 33),
-                titleLabel.trailingAnchor.constraint(equalTo: superView.trailingAnchor, constant: -33),
-                titleLabel.bottomAnchor.constraint(equalTo: superView.bottomAnchor, constant: -33)
+                titleLabel.trailingAnchor.constraint(equalTo: superView.trailingAnchor, constant: -33)
             ]
             NSLayoutConstraint.activate(constraints)
             titleLabelConstraints = constraints
         }
         
+        if purchaseItemStackViewConstraints == nil, let superView = purchaseItemStackView.superview {
+            let constraints = [
+                purchaseItemStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 19),
+                purchaseItemStackView.leadingAnchor.constraint(equalTo: superView.leadingAnchor, constant: 20),
+                purchaseItemStackView.trailingAnchor.constraint(equalTo: superView.trailingAnchor, constant: -20),
+                purchaseItemStackView.bottomAnchor.constraint(equalTo: superView.bottomAnchor, constant: -33)
+            ]
+            NSLayoutConstraint.activate(constraints)
+            purchaseItemStackViewConstraints = constraints
+        }
+        
         super.updateViewConstraints()
+    }
+    
+    private func addSubViews() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(containerView)
+        containerView.addSubview(titleLabel)
+        containerView.addSubview(purchaseItemStackView)
+    }
+    
+    private func bindViewModel() {
+        viewModel.$state
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.purchaseItemStackView.arrangedSubviews.forEach {
+                    $0.removeFromSuperview()
+                }
+                self?.viewModel.state.purchaseItems?.forEach {
+                    self?.purchaseItemStackView.addArrangedSubview(PurchaseSelectedItemView(viewModel: $0))
+                }
+            }
+            .store(in: &cancellables)
     }
 }
 
