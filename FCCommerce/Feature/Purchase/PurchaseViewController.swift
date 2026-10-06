@@ -14,6 +14,7 @@ final class PurchaseViewController: UIViewController {
     private var scrollViewConstraints: [NSLayoutConstraint]?
     private var titleLabelConstraints: [NSLayoutConstraint]?
     private var purchaseItemStackViewConstraints: [NSLayoutConstraint]?
+    private var purchaseButtonConstraints: [NSLayoutConstraint]?
     
     private var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -43,10 +44,21 @@ final class PurchaseViewController: UIViewController {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
+    private var purchaseButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("결제하기", for: .normal)
+        button.setTitleColor(CPColor.UIKit.wh, for: .normal)
+        button.titleLabel?.font = CPFont.UIKit.m16
+        button.layer.backgroundColor = CPColor.UIKit.keyColorBlue.cgColor
+        button.layer.cornerRadius = 5
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = .systemBackground
         addSubViews()
         bindViewModel()
         viewModel.process(.loadData)
@@ -58,12 +70,13 @@ final class PurchaseViewController: UIViewController {
                 scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
                 scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
                 scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-                scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+                scrollView.bottomAnchor.constraint(equalTo: purchaseButton.topAnchor),
                 
                 containerView.topAnchor.constraint(equalTo: scrollView.topAnchor),
                 containerView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
                 containerView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-                containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
+                containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+                containerView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
             ]
             NSLayoutConstraint.activate(constraints)
             scrollViewConstraints = constraints
@@ -90,6 +103,17 @@ final class PurchaseViewController: UIViewController {
             purchaseItemStackViewConstraints = constraints
         }
         
+        if purchaseButtonConstraints == nil {
+            let constraints = [
+                purchaseButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+                purchaseButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+                purchaseButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -32),
+                purchaseButton.heightAnchor.constraint(equalToConstant: 50)
+            ]
+            NSLayoutConstraint.activate(constraints)
+            purchaseButtonConstraints = constraints
+        }
+        
         super.updateViewConstraints()
     }
     
@@ -98,6 +122,7 @@ final class PurchaseViewController: UIViewController {
         scrollView.addSubview(containerView)
         containerView.addSubview(titleLabel)
         containerView.addSubview(purchaseItemStackView)
+        view.addSubview(purchaseButton)
     }
     
     private func bindViewModel() {
