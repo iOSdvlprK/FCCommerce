@@ -17,14 +17,9 @@ enum NetworkError: Error {
 
 class NetworkService {
     static let shared = NetworkService()
-    
-    private let hostURL = "https://my-json-server.typicode.com/JeaSungLEE"
-    
-    private func createURL(withPath path: String) throws -> URL {
-        let urlString = "\(hostURL)\(path)"
-        guard let url = URL(string: urlString) else { throw NetworkError.urlError }
-        return url
-    }
+    private let homeURLString = "https://gist.github.com/iOSdvlprK/c08ac50d3654bd8e4f32137133e030ec/raw/home.json"
+    private let favoriteURLString = "https://gist.github.com/iOSdvlprK/c08ac50d3654bd8e4f32137133e030ec/raw/favorite.json"
+    private let productDetailURLString = "https://gist.github.com/iOSdvlprK/c08ac50d3654bd8e4f32137133e030ec/raw/product_detail.json"
     
     private func fetchData(from url: URL) async throws -> Data {
         let (data, response) = try await URLSession.shared.data(from: url)
@@ -40,7 +35,7 @@ class NetworkService {
     }
     
     func getHomeData() async throws -> HomeResponse {
-        let url = try createURL(withPath: "/JsonAPIFastCampus/db")
+        guard let url = URL(string: homeURLString) else { throw NetworkError.urlError }
         let data = try await fetchData(from: url)
         do {
             let decodeData = try JSONDecoder().decode(HomeResponse.self, from: data)
@@ -51,7 +46,7 @@ class NetworkService {
     }
     
     func getFavoriteData() async throws -> FavoriteResponse {
-        let url = try createURL(withPath: "/jsonapifastcampusfavorite/db")
+        guard let url = URL(string: favoriteURLString) else { throw NetworkError.urlError }
         let data = try await fetchData(from: url)
         do {
             let decodeData = try JSONDecoder().decode(FavoriteResponse.self, from: data)
@@ -62,7 +57,7 @@ class NetworkService {
     }
     
     func getProductDetailData() async throws -> ProductDetailResponse {
-        let url = try createURL(withPath: "/JsonAPIFastCampusProductDetail/db")
+        guard let url = URL(string: productDetailURLString) else { throw NetworkError.urlError }
         let data = try await fetchData(from: url)
         do {
             let decodeData = try JSONDecoder().decode(ProductDetailResponse.self, from: data)
