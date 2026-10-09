@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>WKWebView 테스트 페이지</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 10px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 32px;
+            margin: 4px 2px;
+            cursor: pointer;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+    </style>
+    <script type="text/javascript">
+        function javascriptFunction() {
+            document.getElementById("result").innerHTML = "javascriptFunction() 호출됨!";
+        }
+
+        function showUserAgent() {
+            document.getElementById("result").innerHTML = "유저 에이전트: " + navigator.userAgent;
+        }
+
+        function showCookie() {
+            document.getElementById("result").innerHTML = "쿠키: " + document.cookie;
+        }
+
+        function showHeaders() {
+            document.getElementById("result").innerHTML = "HTTP 헤더 정보는 서버 측에서 확인 필요";
+        }
+
+        function sendMessageToiOS() {
+            window.webkit.messageHandlers.receiveMessage.postMessage('Hello from Web!');
+        }
+    </script>
+</head>
+<body>
+    <h1>WKWebView 기능 테스트</h1>
+    <button onclick="javascriptFunction()">JavaScript 함수 호출</button>
+    <button onclick="showUserAgent()">유저 에이전트 보기</button>
+    <button onclick="showCookie()">쿠키 보기</button>
+    <button onclick="showHeaders()">HTTP 헤더 보기</button>
+    <button onclick="sendMessageToiOS()">Send Message to iOS</button>
+    <div id="result"></div>
+</body>
+</html>
