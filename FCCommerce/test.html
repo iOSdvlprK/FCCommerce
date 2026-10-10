@@ -49,6 +49,10 @@
         function sendMessageToiOS() {
             window.webkit.messageHandlers.receiveMessage.postMessage('Hello from Web!');
         }
+        
+        function sendMessageToiOS2() {
+            window.webkit.messageHandlers.paymentComplete.postMessage('결제 완료!');
+        }
     </script>
 </head>
 <body>
@@ -58,6 +62,7 @@
     <button onclick="showCookie()">쿠키 보기</button>
     <button onclick="showHeaders()">HTTP 헤더 보기</button>
     <button onclick="sendMessageToiOS()">Send Message to iOS</button>
+    <button onclick="sendMessageToiOS2()">Send Message to iOS Payment</button>
     <div id="result"></div>
 </body>
 </html>
